@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>EduSpark – Upload Content</title>
+    <link rel="stylesheet" href="css/style.css" />
+</head>
+
+<body>
+
+    <!-- ═══════ NAVBAR (inlined) ═══════ -->
+    <div id="navbar">
+        <header class="shared-navbar">
+            <a class="shared-navbar__brand" href="dashboard.html">
+                <span class="shared-navbar__badge">ES</span>
+                <span>EduSpark</span>
+            </a>
+            <nav class="shared-navbar__links" aria-label="Main navigation">
+                <a class="shared-navbar__link" data-page="dashboard.html" href="dashboard.html">Dashboard</a>
+                <a class="shared-navbar__link" data-page="subjects.html" href="subjects.html">Subjects</a>
+                <a class="shared-navbar__link" data-page="library.html" href="library.html">Library</a>
+                <a class="shared-navbar__link" data-page="storage.html" href="storage.html">Storage</a>
+                <a class="shared-navbar__link active" data-page="upload.html" href="upload.html">Upload</a>
+            </nav>
+            <div class="shared-navbar__actions">
+                <button class="shared-navbar__logout" type="button" onclick="logout()">Logout</button>
+            </div>
+        </header>
+    </div>
+
+    <!-- ═══════ MAIN ═══════ -->
+    <main>
+        <div class="upload-wrap">
+
+            <!-- Page title -->
+            <div class="page-title">
+                <h1>Upload Academic Content</h1>
+                <p>Submit your materials for the current semester.</p>
+            </div>
+
+            <!-- Upload card -->
+            <div class="upload-card">
+
+                <!-- Drop zone -->
+                <div class="drop-zone" id="dropZone">
+                    <input type="file" id="fileInput" multiple accept=".pdf,.doc,.docx,.mp3,.wav,.html,.pptx,.mp4" />
+                    <div class="upload-cloud-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2">
+                            <polyline points="16 16 12 12 8 16" />
+                            <line x1="12" y1="12" x2="12" y2="21" />
+                            <path d="M20.39 18.39A5 5 0 0018 9h-1.26A8 8 0 103 16.3" />
+                        </svg>
+                    </div>
+                    <h3>Drag and drop file(s) here</h3>
+                    <div class="formats">Supported formats: PDF, DOC, DOCX, MP3, WAV, HTML, PPTX, MP4</div>
+                    <div class="maxsize">Maximum file size: 3MB</div>
+                    <button class="btn-browse" type="button">Browse Files</button>
+                </div>
+
+                <div class="file-preview" id="filePreview" aria-live="polite">
+                    <h4>Selected File(s) Preview</h4>
+                    <div class="meta" id="selectedFileMeta">No file selected</div>
+                    <div class="list" id="selectedFileList"></div>
+                    <div class="render" id="previewRender">Choose file(s) to preview before upload.</div>
+                </div>
+
+                <div class="upload-queue" id="uploadQueue" aria-live="polite">
+                    <h4>Upload Queue</h4>
+                    <div class="queue-summary" id="queueSummary">No uploads started yet.</div>
+                    <div class="queue-progress-wrap">
+                        <div class="queue-progress" id="overallProgressBar"></div>
+                    </div>
+                    <div class="queue-list" id="queueList"></div>
+                </div>
+
+                <!-- Form fields -->
+                <form id="uploadForm">
+                    <div class="form-row">
+                        <!-- Academic Level -->
+                        <div class="form-field">
+                            <label for="level">Academic Level</label>
+                            <div class="select-wrap">
+                                <select id="level" name="level">
+                                    <option value="" disabled selected>Select Level</option>
+                                    <option value="undergraduate">Undergraduate</option>
+                                    <option value="graduate">Graduate</option>
+                                    <option value="phd">PhD</option>
+                                </select>
+                                <span class="select-arrow">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <polyline points="6 9 12 15 18 9" />
+                                    </svg>
+                                </span>
+                            </div>
+                        </div>
+                        <!-- Subject Folder -->
+                        <div class="form-field">
+                            <label for="subject">Subject Folder</label>
+                            <div class="select-wrap">
+                                <select id="subject" name="subject">
+                                    <option value="" disabled selected>Select Folder</option>
+                                </select>
+                                <span class="select-arrow">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <polyline points="6 9 12 15 18 9" />
+                                    </svg>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Content Category (full width) -->
+                    <div class="form-field full" style="margin-bottom: 20px;">
+                        <label for="category">Content Category</label>
+                        <div class="select-wrap">
+                            <select id="category" name="category">
+                                <option value="" disabled selected>Select Category</option>
+                                <option value="notes">Lecture Notes</option>
+                                <option value="assignment">Assignment</option>
+                                <option value="research">Research Paper</option>
+                                <option value="exam">Past Exam</option>
+                            </select>
+                            <span class="select-arrow">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polyline points="6 9 12 15 18 9" />
+                                </svg>
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="upload-actions">
+                        <button class="btn-upload" id="uploadBtn" type="button" style="margin-top:0;">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                                <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" />
+                                <polyline points="14 2 14 8 20 8" />
+                            </svg>
+                            Upload Material
+                        </button>
+                    </div>
+
+                    <div class="upload-status" id="uploadStatus" aria-live="polite"></div>
+                </form>
+            </div>
+
+            <!-- Help line -->
+            <div class="help-line">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10" />
+                    <path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3" />
+                    <line x1="12" y1="17" x2="12.01" y2="17" />
+                </svg>
+                Need help with your upload?
+                <a href="#">Contact Faculty Support</a>
+            </div>
+        </div>
+    </main>
+
+    <!-- ═══════ FOOTER ═══════ -->
+    <footer>
+        © 2024 EduSpark Academic Management System
+    </footer>
+
+    <!-- ══════════════════════════════════════════════════════════════════
+         ALL JS INLINED — eliminates 6+ HTTP requests to ESP32
+         ══════════════════════════════════════════════════════════════════ -->
+    <script>
+    // ===== auth =====
+    function getLoggedInUser() {
+      var s = localStorage.getItem("loggedInUser") || localStorage.getItem("currentUser") || localStorage.getItem("edusparkSession");
+      if (!s) return null;
+      try { return JSON.parse(s); } catch(e) { return null; }
+    }
+    function requireLogin() {
+      if (!getLoggedInUser()) { window.location.replace("index.html"); return false; }
+      return true;
+    }
+    function logout() {
+      localStorage.removeItem("loggedInUser");
+      localStorage.removeItem("currentUser");
+      localStorage.removeItem("edusparkSession");
+      window.location.href = "index.html";
+    }
+    window.getLoggedInUser = getLoggedInUser;
+    window.requireLogin = requireLogin;
+    window.logout = logout;
+
+    // ===== navbar setup (inlined) =====
+    (function() {
+      var user = getLoggedInUser();
+      if (!user) { window.location.replace("index.html"); return; }
+      document.body.classList.add("has-navbar");
+      if (!user || user.role !== "faculty") {
+        document.querySelectorAll("[data-role-only='faculty']").forEach(function(el) { el.style.display = "none"; });
+      }
+      // Faculty-only page check
+      if (!user || user.role !== "faculty") {
+        alert("Access denied. Faculty only.");
+        window.location.href = "dashboard.html";
+        return;
+      }
+    })();
+
+    // ===== upload logic =====
+    document.addEventListener("DOMContentLoaded", async function() {
+      var fileInput = document.getElementById("fileInput");
+      var folderSelect = document.getElementById("subject");
+      var uploadBtn = document.getElementById("uploadBtn");
+      var statusEl = document.getElementById("uploadStatus");
+      var progressBar = document.getElementById("overallProgressBar");
+      var MAX_UPLOAD_SIZE = 3 * 1024 * 1024;
+      var uploadInProgress = false;
+
+      function setStatus(msg) { if (statusEl) statusEl.textContent = msg; }
+      function setProgress(pct) { if (progressBar) progressBar.style.width = pct + "%"; }
+
+      // Load folders
+      try {
+        var res = await fetch("folders");
+        var folders = await res.json();
+        folderSelect.innerHTML = '<option value="">Select Folder</option>';
+        folders.forEach(function(f) {
+          var opt = document.createElement("option");
+          opt.value = f;
+          opt.textContent = f;
+          folderSelect.appendChild(opt);
+        });
+      } catch(e) {
+        console.error("Failed to load folders:", e);
+      }
+
+      // File preview
+      fileInput.addEventListener("change", function() {
+        var files = Array.from(fileInput.files || []);
+        var meta = document.getElementById("selectedFileMeta");
+        if (meta) {
+          if (files.length === 0) { meta.textContent = "No file selected"; }
+          else { meta.textContent = files.length + " file(s) selected: " + files.map(function(f) { return f.name + " (" + (f.size / 1024).toFixed(1) + " KB)"; }).join(", "); }
+        }
+      });
+
+      // Single-request upload — sends entire file at once.
+      // ESP32 WebServer handles internal chunking automatically.
+      async function uploadFile(folder, file) {
+        var form = new FormData();
+        form.append("file", file);
+
+        var url = "/upload?folder=" + encodeURIComponent(folder) +
+          "&file=" + encodeURIComponent(file.name);
+
+        setStatus("Uploading " + file.name + "...");
+        setProgress(10);
+
+        var response = await fetch(url, {
+          method: "POST",
+          headers: { "X-User-Role": "faculty" },
+          body: form
+        });
+
+        setProgress(90);
+
+        var data = null;
+        try { data = await response.json(); } catch(e) {}
+
+        if (!response.ok || !data || data.status !== "success") {
+          throw new Error((data && data.message) || "Upload failed");
+        }
+
+        setProgress(100);
+      }
+
+      // Upload button handler
+      uploadBtn.addEventListener("click", async function() {
+        if (uploadInProgress) return;
+
+        var files = Array.from(fileInput.files || []);
+        var folder = folderSelect.value;
+        if (!folder) { alert("Please select a folder first."); return; }
+        if (files.length === 0) { alert("Please select a file to upload."); return; }
+
+        uploadInProgress = true;
+        uploadBtn.disabled = true;
+        setProgress(0);
+
+        var successCount = 0;
+        var failCount = 0;
+
+        for (var k = 0; k < files.length; k++) {
+          var file = files[k];
+          var name = file.name.toLowerCase();
+
+          // Validate file type
+          var validType = name.endsWith(".pdf") || name.endsWith(".doc") || name.endsWith(".docx") ||
+            name.endsWith(".mp3") || name.endsWith(".wav") || name.endsWith(".html") || name.endsWith(".htm") ||
+            name.endsWith(".pptx") || name.endsWith(".ppt") || name.endsWith(".mp4");
+          if (!validType) {
+            alert("Skipping invalid file type: " + file.name);
+            failCount++;
+            continue;
+          }
+
+          if (file.size > MAX_UPLOAD_SIZE) {
+            alert("Skipping " + file.name + " — too large (max 3MB).");
+            failCount++;
+            continue;
+          }
+
+          try {
+            setStatus("Uploading " + file.name + " (" + (k+1) + "/" + files.length + ")...");
+            setProgress(0);
+            await uploadFile(folder, file);
+            successCount++;
+          } catch(e) {
+            alert("Failed to upload " + file.name + ": " + e.message);
+            failCount++;
+          }
+        }
+
+        uploadInProgress = false;
+        uploadBtn.disabled = false;
+        setProgress(100);
+
+        if (successCount > 0 && failCount === 0) {
+          setStatus("Upload complete! " + successCount + " file(s) uploaded successfully.");
+          alert("Upload success! " + successCount + " file(s) uploaded. Files are now visible to students.");
+        } else if (successCount > 0) {
+          setStatus(successCount + " uploaded, " + failCount + " failed.");
+          alert(successCount + " file(s) uploaded, " + failCount + " failed.");
+        } else {
+          setStatus("Upload failed.");
+        }
+
+        fileInput.value = "";
+        if (document.getElementById("selectedFileMeta")) {
+          document.getElementById("selectedFileMeta").textContent = "No file selected";
+        }
+      });
+    });
+    </script>
+
+</body>
+</html>

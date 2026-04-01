@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Subject Browser – EduSpark</title>
+    <link rel="stylesheet" href="css/style.css" />
+</head>
+<!-- <script>
+if (!localStorage.getItem("loggedInUser")) {
+  window.location.replace("index.html");
+}
+</script> -->
+<body>
+
+    <!-- â•â•â•â•â•â•â• NAVBAR â•â•â•â•â•â•â• -->
+    <div id="navbar"></div>
+
+    <!-- â•â•â•â•â•â•â• MAIN â•â•â•â•â•â•â• -->
+    <main>
+        <!-- Page header -->
+        <div class="page-head">
+            <div>
+                <h1>Subject Browser</h1>
+                <p>Organize your academic materials by creating subject folders for notes, assignments, and resources.
+                </p>
+            </div>
+            <button class="btn-add-folder" onClick="createFolder()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <line x1="12" y1="5" x2="12" y2="19" />
+                    <line x1="5" y1="12" x2="19" y2="12" />
+                </svg>
+                Add Folder
+            </button>
+        </div>
+
+        <!-- Tabs -->
+        <div class="tab-bar">
+            <button class="active">All Subjects</button>
+            <button>Recent</button>
+            <button>Starred</button>
+            <button>Archived</button>
+        </div>
+
+        <!-- Folder cards -->
+        <div class="folder-grid">
+            <!-- Dynamically populated -->
+        </div>
+
+        <!-- Empty state -->
+        <div class="empty-card">
+            <div class="empty-icon-wrap">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z" />
+                </svg>
+            </div>
+            <h2>No Folders Created Yet</h2>
+            <p>Start organizing your academic journey by creating your first subject folder. Drag and drop files to get
+                started.</p>
+            <button class="btn-add-first" onclick="createFolder()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <line x1="12" y1="5" x2="12" y2="19" />
+                    <line x1="5" y1="12" x2="19" y2="12" />
+                </svg>
+                Add First Folder
+            </button>
+        </div>
+    </main>
+
+    <!-- â•â•â•â•â•â•â• FOOTER â•â•â•â•â•â•â• -->
+    <footer>
+        <div class="footer-logo">
+            <div class="footer-logo-icon">
+                <svg viewBox="0 0 24 24">
+                    <path d="M12 3L1 9l11 6 9-4.91V17h2V9L12 3zM5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82z" />
+                </svg>
+            </div>
+            EduSpark
+        </div>
+        <div class="footer-copy">Â© 2024 EduSpark Learning Systems. All academic rights reserved.</div>
+    </footer>
+
+    <script src="js/config.js" defer></script>
+    <script src="js/api.js" defer></script>
+    <script src="js/auth.js" defer></script>
+    <script src="js/navbar-loader.js" defer></script>
+    <script src="js/subjects.js" defer></script>
+</body>
+
+</html>

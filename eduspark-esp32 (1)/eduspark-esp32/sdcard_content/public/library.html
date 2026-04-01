@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>EduSpark – Study Materials</title>
+    <link rel="stylesheet" href="css/style.css" />
+</head>
+
+<body>
+
+    <!-- ══════════════════════════════ NAVBAR (inlined) ══════════════════════════════ -->
+    <div id="navbar">
+        <header class="shared-navbar">
+            <a class="shared-navbar__brand" href="dashboard.html">
+                <span class="shared-navbar__badge">ES</span>
+                <span>EduSpark</span>
+            </a>
+            <nav class="shared-navbar__links" aria-label="Main navigation">
+                <a class="shared-navbar__link" data-page="dashboard.html" href="dashboard.html">Dashboard</a>
+                <a class="shared-navbar__link" data-page="subjects.html" href="subjects.html">Subjects</a>
+                <a class="shared-navbar__link active" data-page="library.html" href="library.html">Library</a>
+                <a class="shared-navbar__link" data-page="storage.html" href="storage.html">Storage</a>
+                <a class="shared-navbar__link" data-page="upload.html" data-role-only="faculty" href="upload.html">Upload</a>
+            </nav>
+            <div class="shared-navbar__actions">
+                <button class="shared-navbar__logout" type="button" onclick="logout()">Logout</button>
+            </div>
+        </header>
+    </div>
+
+    <!-- ══════════════════════════════ MAIN ══════════════════════════════ -->
+    <main>
+
+        <!-- Breadcrumb -->
+        <nav class="breadcrumb">
+            <a href="dashboard.html">Home</a>
+            <span class="sep">&rsaquo;</span>
+            <span class="current">E-Book Library</span>
+        </nav>
+
+        <!-- Page header -->
+        <div class="page-header">
+            <div>
+                <h1>E-Book Library</h1>
+                <p>Small e-books are stored on ESP32 SD card in the library folder.</p>
+            </div>
+            <div class="header-actions">
+                <button class="btn-outline" id="refreshBooksBtn">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="23 4 23 10 17 10" />
+                        <polyline points="1 20 1 14 7 14" />
+                        <path d="M3.51 9a9 9 0 0114.13-3.36L23 10M1 14l5.36 4.36A9 9 0 0020.49 15" />
+                    </svg>
+                    Refresh
+                </button>
+                <button class="btn-outline destructive" id="deleteLibraryFolderBtn" style="display:none;">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="3 6 5 6 21 6" />
+                        <path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6" />
+                        <path d="M10 11v6M14 11v6" />
+                        <path d="M9 6V4a1 1 0 011-1h4a1 1 0 011 1v2" />
+                    </svg>
+                    Delete Library Folder
+                </button>
+                <button class="btn-primary" id="uploadBookBtn">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                        <line x1="12" y1="5" x2="12" y2="19" />
+                        <line x1="5" y1="12" x2="19" y2="12" />
+                    </svg>
+                    Upload E-Book
+                </button>
+                <input id="bookFileInput" type="file" accept=".pdf,.doc,.docx,.html,.htm,.ppt,.pptx,.mp3,.wav,.mp4" multiple hidden />
+            </div>
+        </div>
+
+        <!-- Stat cards -->
+        <div class="stat-row">
+            <div class="stat-card">
+                <div class="stat-icon blue">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2">
+                        <path d="M4 19.5A2.5 2.5 0 006.5 22H20" />
+                        <path d="M20 2H8a2 2 0 00-2 2v18" />
+                    </svg>
+                </div>
+                <div>
+                    <div class="stat-label">E-Books</div>
+                    <div class="stat-value" id="statTotalBooks">0</div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon orange">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="#f97316" stroke-width="2">
+                        <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4" />
+                        <polyline points="7 10 12 15 17 10" />
+                        <line x1="12" y1="15" x2="12" y2="3" />
+                    </svg>
+                </div>
+                <div>
+                    <div class="stat-label">Access</div>
+                    <div class="stat-value" id="statRoleAccess">Student: Download</div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon green">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2">
+                        <path d="M20 6L9 17l-5-5" />
+                    </svg>
+                </div>
+                <div>
+                    <div class="stat-label">Upload Limit</div>
+                    <div class="stat-value">3 MB max</div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon purple">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="#8b5cf6" stroke-width="2">
+                        <path d="M3 3h18v18H3z" />
+                        <path d="M7 8h10M7 12h10M7 16h6" />
+                    </svg>
+                </div>
+                <div>
+                    <div class="stat-label">Storage Folder</div>
+                    <div class="stat-value">/library</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- File Table -->
+        <div class="table-card" id="libraryTableCard">
+            <table class="file-table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Type</th>
+                        <th>Subject</th>
+                        <th>Date</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="libraryTableBody">
+                    <tr>
+                        <td colspan="5">Loading e-books from SD card...</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Empty State -->
+        <div class="empty-card" id="emptyLibraryState" style="display:none;">
+            <div class="empty-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <path d="M4 19.5A2.5 2.5 0 006.5 22H20" />
+                    <path d="M20 2H8a2 2 0 00-2 2v18" />
+                </svg>
+            </div>
+            <h2>No E-Books Yet</h2>
+            <p>This library folder is empty. Teachers can upload small e-books and students can download them.</p>
+            <button class="btn-primary-md" id="uploadFirstBookBtn">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <line x1="12" y1="5" x2="12" y2="19" />
+                    <line x1="5" y1="12" x2="19" y2="12" />
+                </svg>
+                Upload First E-Book
+            </button>
+        </div>
+
+    </main>
+
+    <!-- ══════════════════════════════ FOOTER ══════════════════════════════ -->
+    <footer>
+        <div class="footer-main">
+            <!-- Brand -->
+            <div class="footer-brand">
+                <div class="logo">
+                    <div class="logo-icon">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M12 3L1 9l11 6 9-4.91V17h2V9L12 3zM5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82z" />
+                        </svg>
+                    </div>
+                    EduSpark
+                </div>
+                <p>The ultimate platform for collaborative learning and resource management in modern education.</p>
+            </div>
+            <!-- Platform -->
+            <div class="footer-col">
+                <h3>Platform</h3>
+                <a href="dashboard.html">Dashboard</a>
+                <a href="#">Courses</a>
+                <a href="library.html">Materials</a>
+            </div>
+            <!-- Company -->
+            <div class="footer-col">
+                <h3>Company</h3>
+                <a href="#">About Us</a>
+                <a href="#">Contact</a>
+                <a href="#">Careers</a>
+            </div>
+            <!-- Legal -->
+            <div class="footer-col">
+                <h3>Legal</h3>
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms of Use</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            &copy; 2024 EduSpark. All rights reserved. Designed for excellence in learning.
+        </div>
+    </footer>
+
+    <!-- ══════════════════════════════════════════════════════════════════
+         ALL JS INLINED — eliminates 7 HTTP requests to ESP32
+         ══════════════════════════════════════════════════════════════════ -->
+    <script>
+    // ===== config.js =====
+    var API_BASE = "";
+
+    // ===== api.js =====
+    async function apiGet(endpoint) {
+      var res = await fetch(API_BASE + endpoint);
+      return await res.json();
+    }
+    async function apiPost(endpoint, data) {
+      var res = await fetch(API_BASE + endpoint, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data)
+      });
+      return await res.json();
+    }
+
+    // ===== auth.js =====
+    function getCurrentPageName() {
+      var path = window.location.pathname || "/";
+      var page = path.split("/").pop();
+      return page || "index.html";
+    }
+    function getLoggedInUser() {
+      var storedUser = localStorage.getItem("loggedInUser") ||
+        localStorage.getItem("currentUser") ||
+        localStorage.getItem("edusparkSession");
+      if (!storedUser) return null;
+      try { return JSON.parse(storedUser); }
+      catch (e) {
+        localStorage.removeItem("loggedInUser");
+        localStorage.removeItem("currentUser");
+        localStorage.removeItem("edusparkSession");
+        return null;
+      }
+    }
+    function isLoginPage() {
+      return getCurrentPageName().toLowerCase() === "index.html";
+    }
+    function requireLogin() {
+      if (!getLoggedInUser()) { window.location.replace("index.html"); return false; }
+      return true;
+    }
+    function logout() {
+      localStorage.removeItem("loggedInUser");
+      localStorage.removeItem("currentUser");
+      localStorage.removeItem("edusparkSession");
+      window.location.href = "index.html";
+    }
+    window.getLoggedInUser = getLoggedInUser;
+    window.requireLogin = requireLogin;
+    window.logout = logout;
+
+    // ===== roles.js =====
+    function getCurrentUserRole() {
+      var rawUser = localStorage.getItem("loggedInUser") || localStorage.getItem("currentUser");
+      if (!rawUser) return null;
+      try {
+        var user = JSON.parse(rawUser);
+        return user && typeof user.role === "string" ? user.role.trim().toLowerCase() : null;
+      } catch (e) { return null; }
+    }
+    function hideUploadForStudents() {
+      if (getCurrentUserRole() === "student") {
+        document.querySelectorAll('a[href="upload.html"]').forEach(function(el) { el.style.display = "none"; });
+        var uploadBtn = document.getElementById("uploadBtn");
+        if (uploadBtn) uploadBtn.style.display = "none";
+      }
+    }
+    window.getCurrentUserRole = getCurrentUserRole;
+    window.hideUploadForStudents = hideUploadForStudents;
+
+    // ===== navbar setup (inlined — no fetch needed) =====
+    (function() {
+      if (!getLoggedInUser()) { window.location.replace("index.html"); return; }
+      document.body.classList.add("has-navbar");
+      var user = getLoggedInUser();
+      if (!user || user.role !== "faculty") {
+        document.querySelectorAll("[data-role-only='faculty']").forEach(function(el) { el.style.display = "none"; });
+      }
+      hideUploadForStudents();
+    })();
+
+    // ===== library.js (inlined) =====
+    function escapeHtml(str) {
+      return String(str)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#39;");
+    }
+    function getFileExtension(filename) {
+      var parts = filename.split(".");
+      return parts.length > 1 ? parts.pop().toLowerCase() : "";
+    }
+    function getFileTypeLabel(ext) {
+      switch (ext) {
+        case "pdf": return "PDF";
+        case "doc": case "docx": return "Word";
+        case "mp3": case "wav": return "Audio";
+        case "html": case "htm": return "Web";
+        case "pptx": case "ppt": return "Presentation";
+        case "mp4": return "Video";
+        default: return ext.toUpperCase() || "File";
+      }
+    }
+    function getFileIconClass(ext) {
+      switch (ext) {
+        case "pdf": return "pdf";
+        case "doc": case "docx": return "word";
+        case "html": return "word";
+        case "pptx": return "word";
+        case "mp3": case "wav": return "video";
+        case "mp4": return "video";
+        default: return "zip";
+      }
+    }
+    function getCurrentRole() {
+      try {
+        var user = JSON.parse(localStorage.getItem("loggedInUser") || "{}");
+        return String(user.role || "").toLowerCase();
+      } catch (e) { return ""; }
+    }
+
+    // Download handler
+    function handleDownload(folder, file) {
+      var folderParam = encodeURIComponent(String(folder || ""));
+      var fileParam = encodeURIComponent(String(file || ""));
+      window.open("download?folder=" + folderParam + "&file=" + fileParam);
+    }
+
+    // Delete handler
+    async function handleDelete(folder, file) {
+      if (!confirm('Delete "' + file + '" from ' + folder + "?")) return;
+      try {
+        var res = await fetch("delete?folder=" + encodeURIComponent(folder) + "&file=" + encodeURIComponent(file), {
+          method: "POST",
+          headers: { "X-User-Role": "faculty" }
+        });
+        var data = await res.json().catch(function () { return {}; });
+        if (!res.ok) { alert(data.message || "Delete failed"); return; }
+        alert("File deleted");
+        loadLibrary();
+      } catch (err) { alert("Delete error: " + err.message); }
+    }
+
+    async function loadLibrary() {
+      var table = document.getElementById("libraryTableBody");
+      var emptyState = document.getElementById("emptyLibraryState");
+      var tableCard = document.getElementById("libraryTableCard");
+      var totalStat = document.getElementById("statTotalBooks");
+      var roleStat = document.getElementById("statRoleAccess");
+      var role = getCurrentRole();
+
+      if (roleStat) {
+        roleStat.textContent = role === "faculty" ? "Faculty: Full Access" : "Student: View & Download";
+      }
+      if (role === "student") {
+        var ub = document.getElementById("uploadBookBtn");
+        var uf = document.getElementById("uploadFirstBookBtn");
+        var dl = document.getElementById("deleteLibraryFolderBtn");
+        if (ub) ub.style.display = "none";
+        if (uf) uf.style.display = "none";
+        if (dl) dl.style.display = "none";
+      }
+
+      try {
+        var filesRes = await fetch("list-files?folder=library");
+        if (!filesRes.ok) throw new Error("Failed to fetch library files");
+        var files = await filesRes.json();
+
+        table.innerHTML = "";
+        var totalFiles = 0;
+
+        files.forEach(function (item) {
+          var file = item;
+          var folderName = "";
+          if (item && typeof item === 'object') {
+            file = item.file || '';
+            folderName = item.folder || '';
+          }
+          if (!file) return;
+          totalFiles++;
+
+          var ext = getFileExtension(file);
+          var typeLabel = getFileTypeLabel(ext);
+          var iconClass = getFileIconClass(ext);
+          var escapedFolder = escapeHtml(folderName);
+          var escapedFile = escapeHtml(file);
+
+          var actionHtml =
+            '<button class="action-btn" onclick="handleDownload(\'' +
+            escapedFolder.replace(/'/g, "\\'") + "','" +
+            escapedFile.replace(/'/g, "\\'") +
+            "')\">Download</button>";
+
+          if (role === "faculty") {
+            actionHtml +=
+              '<button class="action-btn delete-btn" onclick="handleDelete(\'' +
+              escapedFolder.replace(/'/g, "\\'") + "','" +
+              escapedFile.replace(/'/g, "\\'") +
+              "')\">Delete</button>";
+          }
+
+          var row = document.createElement("tr");
+          row.innerHTML =
+            "<td>" +
+            '<div class="file-name">' +
+            '<div class="file-icon ' + iconClass + '">' +
+            '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>' +
+            "</div>" +
+            "<span>" + escapedFile + "</span>" +
+            "</div>" +
+            "</td>" +
+            "<td>" + typeLabel + "</td>" +
+            "<td>" + escapedFolder + "</td>" +
+            "<td>—</td>" +
+            "<td class='action-cell'>" + actionHtml + "</td>";
+
+          table.appendChild(row);
+        });
+
+        if (totalStat) totalStat.textContent = totalFiles;
+        if (totalFiles === 0) {
+          if (tableCard) tableCard.style.display = "none";
+          if (emptyState) emptyState.style.display = "flex";
+        } else {
+          if (tableCard) tableCard.style.display = "block";
+          if (emptyState) emptyState.style.display = "none";
+        }
+      } catch (err) {
+        console.error("Library error:", err);
+        table.innerHTML = "<tr><td colspan='5'>Failed to load library. Try refreshing.</td></tr>";
+      }
+    }
+
+    // ===== Page initialization =====
+    document.addEventListener("DOMContentLoaded", function () {
+      if (!getLoggedInUser()) { window.location.replace("index.html"); return; }
+
+      loadLibrary();
+
+      var refreshBtn = document.getElementById("refreshBooksBtn");
+      if (refreshBtn) refreshBtn.addEventListener("click", loadLibrary);
+
+      // ===== UPLOAD LOGIC =====
+      var uploadBtn = document.getElementById("uploadBookBtn");
+      var uploadFirstBtn = document.getElementById("uploadFirstBookBtn");
+      var fileInput = document.getElementById("bookFileInput");
+
+      if (fileInput) {
+        var triggerFileInput = function () {
+          if (getCurrentRole() !== "faculty") { alert("Only faculty can upload books."); return; }
+          fileInput.click();
+        };
+        if (uploadBtn) uploadBtn.addEventListener("click", triggerFileInput);
+        if (uploadFirstBtn) uploadFirstBtn.addEventListener("click", triggerFileInput);
+
+        fileInput.addEventListener("change", async function () {
+          var files = Array.from(fileInput.files || []);
+          if (files.length === 0) return;
+
+          var folder = "library";
+          var CHUNK_SIZE = 512;
+          var CHUNK_DELAY_MS = 80;
+          var FIRST_CHUNK_DELAY_MS = 250;
+          var sleep = function(ms) { return new Promise(function(r) { setTimeout(r, ms); }); };
+
+          async function uploadInChunks(folderName, file) {
+            var offset = 0;
+            var first = true;
+            while (offset < file.size) {
+              if (first) { await sleep(FIRST_CHUNK_DELAY_MS); first = false; }
+
+              var end = Math.min(offset + CHUNK_SIZE, file.size);
+              var chunkBlob = file.slice(offset, end);
+              var chunkBuffer = await chunkBlob.arrayBuffer();
+              var chunkUrl = "/upload?folder=" + encodeURIComponent(folderName) +
+                "&file=" + encodeURIComponent(file.name) +
+                "&offset=" + offset +
+                "&totalSize=" + file.size;
+
+              var chunkResponse = null;
+              for (var attempt = 0; attempt < 2; attempt++) {
+                var form = new FormData();
+                form.append("chunk", new Blob([chunkBuffer]));
+                try {
+                  chunkResponse = await fetch(chunkUrl, {
+                    method: "POST",
+                    headers: { "X-User-Role": "faculty" },
+                    body: form
+                  });
+                } catch (err) { chunkResponse = null; }
+                if (chunkResponse && chunkResponse.ok) break;
+                if (attempt === 0) await sleep(200);
+              }
+
+              var chunkData = null;
+              try { if (chunkResponse) chunkData = await chunkResponse.json(); } catch (err) {}
+              if (!chunkResponse || !chunkResponse.ok || !chunkData || chunkData.status !== "ok") {
+                throw new Error((chunkData && chunkData.message) || "Chunk upload failed");
+              }
+              offset = end;
+              await sleep(CHUNK_DELAY_MS);
+            }
+          }
+
+          for (var k = 0; k < files.length; k++) {
+            var file = files[k];
+            if (file.size > 3 * 1024 * 1024) { alert("File too large: " + file.name + " (Max 3MB)"); continue; }
+            try { await uploadInChunks(folder, file); }
+            catch (e) { alert("Failed to upload " + file.name + ": " + e.message); }
+          }
+
+          alert("Upload complete");
+          fileInput.value = "";
+          loadLibrary();
+        });
+      }
+    });
+    </script>
+
+</body>
+</html>

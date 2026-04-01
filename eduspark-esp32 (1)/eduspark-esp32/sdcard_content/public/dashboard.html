@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EduSpark Dashboard</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<!-- <script>
+  if (!localStorage.getItem("loggedInUser")) {
+    window.location.replace("index.html");
+  }
+</script>-->
+<body>
+  <div class="shell">
+    <div id="navbar"></div>
+
+    <section class="hero">
+      <div>
+        <h1>Learning Command Center</h1>
+        <p>Track content uploads, review activity, and manage storage with a cleaner workspace optimized for your ESP32-powered classroom server.</p>
+        <div class="hero-links">
+          <a class="btn btn-primary" href="upload.html">Upload Materials</a>
+          <a class="btn btn-ghost" href="subjects.html">Open Subject Folders</a>
+        </div>
+      </div>
+      <div class="hero-metrics">
+        <div class="metric">
+          <div class="k">Content Folders</div>
+          <div class="v" id="metricFolders">--</div>
+        </div>
+        <div class="metric">
+          <div class="k">Uploaded Files</div>
+          <div class="v" id="metricFiles">--</div>
+        </div>
+        <div class="metric">
+          <div class="k">Today Uploads</div>
+          <div class="v" id="metricToday">--</div>
+        </div>
+        <div class="metric">
+          <div class="k">Server Mode</div>
+          <div class="v" style="font-size:18px;">ESP32 AP</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="cards">
+      <a class="card" href="subjects.html">
+        <h3>Subject Browser</h3>
+        <p>Jump into folders by course and quickly access uploaded materials.</p>
+      </a>
+      <a class="card" href="upload.html">
+        <h3>Upload Center</h3>
+        <p>Add PDFs, docs, audio and lecture files to the right folder instantly.</p>
+      </a>
+      <a class="card" href="storage.html">
+        <h3>Storage Insights</h3>
+        <p>Monitor usage, detect heavy folders, and keep free space healthy.</p>
+      </a>
+      <a class="card" href="library.html">
+        <h3>Shared Library</h3>
+        <p>Browse common resources and keep classroom content organized.</p>
+      </a>
+    </section>
+
+    <section class="layout">
+      <article class="panel">
+        <div class="panel-head">
+          <h2>Recent Activity</h2>
+          <span class="muted">Last 5 entries</span>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th style="min-width:170px;">Date</th>
+                <th>Action</th>
+                <th>File</th>
+                <th style="min-width:100px;">Status</th>
+              </tr>
+            </thead>
+            <tbody id="recentActivityBody">
+              <tr>
+                <td colspan="4" class="muted" style="padding:16px;">No recent activity</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </article>
+
+      <aside class="panel">
+        <div class="panel-head">
+          <h2>Storage Pulse</h2>
+          <a href="storage.html" class="muted" style="text-decoration:none;">Manage</a>
+        </div>
+        <div class="storage-body">
+          <div class="storage-top">
+            <span>Current usage</span>
+            <span id="storageTag">Live</span>
+          </div>
+          <div class="progress">
+            <div id="storageProgress"></div>
+          </div>
+          <p id="storageText">0% (0GB of 20GB used)</p>
+          <p id="storageWarning"></p>
+
+          <div class="mini-grid">
+            <div class="mini">
+              <div class="label">Download + Delete</div>
+              <div class="value">Enabled</div>
+            </div>
+            <div class="mini">
+              <div class="label">Duplicate Guard</div>
+              <div class="value">Active</div>
+            </div>
+            <div class="mini">
+              <div class="label">Network</div>
+              <div class="value">Local ESP32</div>
+            </div>
+            <div class="mini">
+              <div class="label">Role Mode</div>
+              <div class="value" id="metricRoleMode">ESP32 User</div>
+            </div>
+          </div>
+        </div>
+      </aside>
+    </section>
+
+    <div class="footer">EduSpark Dashboard • Optimized UI for local ESP32 web server</div>
+  </div>
+
+  <script src="js/config.js" defer></script>
+  <script src="js/api.js" defer></script>
+  <script src="js/auth.js" defer></script>
+  <script src="js/navbar-loader.js" defer></script>
+  <script src="js/dashboard.js" defer></script>
+</body>
+</html>

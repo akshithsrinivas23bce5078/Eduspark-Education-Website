@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>EduSpark Login</title>
+    <link rel="stylesheet" href="css/style.css" />
+</head>
+
+<body>
+
+    <!-- Logo -->
+    <div class="logo-wrap">
+        <div class="logo-icon">
+            <!-- graduation cap SVG -->
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 3L1 9l11 6 9-4.91V17h2V9L12 3zM5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82z" />
+            </svg>
+        </div>
+        <div class="logo-title">EduSpark</div>
+        <div class="logo-sub">Ignite Your Learning</div>
+    </div>
+
+    <!-- Login card -->
+    <div class="card">
+        <div class="intro">
+            <h1>Sign in to your workspace</h1>
+            <p>Use your faculty or student account to continue to the EduSpark dashboard.</p>
+        </div>
+
+        <!-- Faculty / Student tabs -->
+        <div class="tab-bar">
+            <input checked id="tab-faculty" name="role" type="radio" value="faculty" />
+            <label for="tab-faculty">Faculty</label>
+            <input id="tab-student" name="role" type="radio" value="student" />
+            <label for="tab-student">Student</label>
+        </div>
+
+        <!-- Form -->
+        <form action="#" class="form" id="login-form" method="POST">
+
+            <!-- Email -->
+            <div class="field">
+                <label class="field-label" for="email">Email Address</label>
+                <input id="email" name="email" placeholder="e.g. name@university.edu" required type="email" />
+            </div>
+
+            <!-- Password -->
+            <div class="field">
+                <div class="field-header">
+                    <label class="field-label" for="password">Password</label>
+                    <a class="forgot-link" href="#">Forgot password?</a>
+                </div>
+                <input id="password" name="password" placeholder="Enter your password" required type="password" />
+            </div>
+
+            <!-- Submit -->
+            <button class="btn-primary" type="submit">Sign In</button>
+
+            <div class="status-message" hidden id="login-status"></div>
+
+        </form>
+
+        <!--<div class="demo-credentials">
+            <strong>Demo faculty:</strong> kavita@university.edu / admin123<br />
+            <strong>Demo student:</strong> arjun@university.edu / 1234
+        </div> -->
+
+        <!-- Card footer -->
+        <div class="card-footer">
+            New to EduSpark? <a href="#">Apply here</a>
+        </div>
+
+    </div>
+
+    <!-- Page footer -->
+    <nav class="page-footer">
+        <a href="#">Terms of Service</a>
+        <a href="#">Privacy Policy</a>
+        <a href="#">Help Center</a>
+    </nav>
+    <script>
+        (function () {
+            const form = document.getElementById('login-form');
+            const emailInput = document.getElementById('email');
+            const passwordInput = document.getElementById('password');
+
+            function getSelectedRole() {
+                const checked = document.querySelector('input[name="role"]:checked');
+                return checked ? checked.value : 'faculty';
+            }
+
+            function buildDisplayName(email) {
+                if (!email) {
+                    return 'EduSpark User';
+                }
+
+                return email
+                    .split('@')[0]
+                    .replace(/[._-]+/g, ' ')
+                    .replace(/\b\w/g, function (match) { return match.toUpperCase(); });
+            }
+
+            form.addEventListener('submit', function (event) {
+                event.preventDefault();
+
+                const email = emailInput.value.trim();
+                const password = passwordInput.value.trim();
+
+                if (!email || !password) {
+                    return;
+                }
+
+                const session = {
+                    loggedIn: true,
+                    role: getSelectedRole(),
+                    email: email,
+                    name: buildDisplayName(email)
+                };
+
+                localStorage.setItem('loggedInUser', JSON.stringify(session));
+                localStorage.setItem('edusparkSession', JSON.stringify(session));
+                window.location.href = 'dashboard.html';
+            });
+        }());
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>EduSpark – Storage Management</title>
+    <link rel="stylesheet" href="css/style.css" />
+</head>
+<!--<script>
+if (!localStorage.getItem("loggedInUser")) {
+  window.location.replace("index.html");
+}
+</script>-->
+<body>
+
+    <!-- â•â•â•â•â•â•â• NAVBAR â•â•â•â•â•â•â• -->
+    <div id="navbar"></div>
+
+    <!-- â•â•â•â•â•â•â• PAGE HEADER â•â•â•â•â•â•â• -->
+    <div class="page-head">
+        <div>
+            <h1>Storage Management</h1>
+            <p>Monitor and optimize your cloud academic resources.</p>
+        </div>
+        <button class="btn-manage">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4" />
+                <polyline points="17 8 12 3 7 8" />
+                <line x1="12" y1="3" x2="12" y2="15" />
+            </svg>
+            Manage Storage
+        </button>
+    </div>
+
+    <!-- â•â•â•â•â•â•â• MAIN â•â•â•â•â•â•â• -->
+    <div class="main-wrap">
+        <div class="top-grid">
+
+            <!-- Overall Usage -->
+            <div class="usage-col">
+                <div class="usage-card">
+                    <h3>Overall Usage</h3>
+                    <div class="donut-wrap">
+                        <svg class="donut-svg" viewBox="0 0 100 100">
+                            <circle class="track" cx="50" cy="50" r="42" />
+                            <circle class="fill" id="donutFill" cx="50" cy="50" r="42" stroke-dashoffset="263.9" />
+                            <text x="50" y="47" class="donut-label donut-pct" id="donutPct">0%</text>
+                            <text x="50" y="58" class="donut-label donut-sub">Used</text>
+                        </svg>
+                    </div>
+                    <div class="usage-nums">
+                        <span class="big" id="usageBig">0 MB</span>
+                        <span class="of"> / 4 GB</span>
+                    </div>
+                    <div class="usage-plan">Academic Storage Plan</div>
+                </div>
+
+                <div class="free-card">
+                    <div>
+                        <div class="free-left">
+                            <div class="free-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                                    <polyline points="20 6 9 17 4 12" />
+                                </svg>
+                            </div>
+                            <div class="free-info">
+                                <div class="label">Free Space</div>
+                                <div class="sub">Available for uploads</div>
+                            </div>
+                        </div>
+                        <div class="free-bar-wrap" style="margin-top:10px;">
+                            <div class="free-bar" style="width:100%"></div>
+                        </div>
+                    </div>
+                    <div class="free-gb">4 GB</div>
+                </div>
+            </div>
+
+            <!-- Category cards -->
+            <div class="cat-grid">
+                <!-- PDF -->
+                <div class="cat-card">
+                    <span class="cat-pct blue" id="catPdfPct">0%</span>
+                    <div class="cat-icon blue">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2">
+                            <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" />
+                            <polyline points="14 2 14 8 20 8" />
+                        </svg>
+                    </div>
+                    <div class="cat-name">PDF Documents</div>
+                    <div class="cat-meta"><span id="catPdfCount">0</span> files • <span id="catPdfSize">0 MB</span></div>
+                    <div class="cat-bar-track">
+                        <div class="cat-bar-fill blue" id="catPdfBar" style="width:0%"></div>
+                    </div>
+                </div>
+                <!-- Video -->
+                <div class="cat-card">
+                    <span class="cat-pct orange" id="catVideoPct">0%</span>
+                    <div class="cat-icon orange">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="#f97316" stroke-width="2">
+                            <polygon points="23 7 16 12 23 17 23 7" />
+                            <rect x="1" y="5" width="15" height="14" rx="2" />
+                        </svg>
+                    </div>
+                    <div class="cat-name">Video Lectures</div>
+                    <div class="cat-meta"><span id="catVideoCount">0</span> files • <span id="catVideoSize">0 MB</span></div>
+                    <div class="cat-bar-track">
+                        <div class="cat-bar-fill orange" id="catVideoBar" style="width:0%"></div>
+                    </div>
+                </div>
+                <!-- Audio -->
+                <div class="cat-card">
+                    <span class="cat-pct purple" id="catAudioPct">0%</span>
+                    <div class="cat-icon purple">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="#a855f7" stroke-width="2">
+                            <path d="M9 18V5l12-2v13" />
+                            <circle cx="6" cy="18" r="3" />
+                            <circle cx="18" cy="16" r="3" />
+                        </svg>
+                    </div>
+                    <div class="cat-name">Audio Recordings</div>
+                    <div class="cat-meta"><span id="catAudioCount">0</span> files • <span id="catAudioSize">0 MB</span></div>
+                    <div class="cat-bar-track">
+                        <div class="cat-bar-fill purple" id="catAudioBar" style="width:0%"></div>
+                    </div>
+                </div>
+                <!-- Other -->
+                <div class="cat-card">
+                    <span class="cat-pct gray">0%</span>
+                    <div class="cat-icon gray">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="#64748b" stroke-width="2">
+                            <path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z" />
+                        </svg>
+                    </div>
+                    <div class="cat-name">Other Assets</div>
+                    <div class="cat-meta">0 files â€¢ 0 GB</div>
+                    <div class="cat-bar-track">
+                        <div class="cat-bar-fill gray" style="width:0%"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Folder Files Section -->
+<div class="table-card">
+    <div class="table-card-head">
+        <h2>Folder Files</h2>
+        <div class="table-card-head-actions">
+            <span class="folder-context" id="currentFolderLabel"></span>
+            <button type="button" class="action-btn delete-btn" id="deleteCurrentFolderBtn" style="display:none;">Delete Current Folder</button>
+        </div>
+    </div>
+
+    <!-- âœ… FILE LIST -->
+    <div id="fileList" style="padding: 20px;"></div>
+
+    <!-- âœ… STORAGE BAR -->
+    <div style="padding: 20px;">
+        <div style="height:8px;background:#eee;border-radius:6px;">
+            <div id="storageProgress" style="height:100%;width:0%;background:#3b82f6;border-radius:6px;"></div>
+        </div>
+
+        <p id="storageText" style="margin-top:10px;"></p>
+        <p id="storageWarning" style="color:red;"></p>
+    </div>
+</div>
+
+    <!-- â•â•â•â•â•â•â• FOOTER â•â•â•â•â•â•â• -->
+    <footer>
+        <div class="footer-logo">
+            <div class="footer-logo-icon">
+                <svg viewBox="0 0 24 24">
+                    <path d="M12 3L1 9l11 6 9-4.91V17h2V9L12 3zM5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82z" />
+                </svg>
+            </div>
+            EduSpark
+        </div>
+        <div class="footer-links">
+            <a href="#">Privacy Policy</a>
+            <a href="#">Terms of Service</a>
+            <a href="#">Support Center</a>
+            <a href="#">API Status</a>
+        </div>
+        <div class="footer-copy">Â© 2024 EduSpark Inc. All rights reserved.</div>
+    </footer>
+
+    <script src="js/config.js" defer></script>
+    <script src="js/api.js" defer></script>
+    <script src="js/auth.js" defer></script>
+    <script src="js/navbar-loader.js" defer></script>
+    <script src="js/downloads.js" defer></script>
+    <script src="js/storage.js" defer></script>
+</body>
+
+</html>

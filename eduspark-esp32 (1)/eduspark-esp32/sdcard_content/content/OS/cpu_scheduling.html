@@ -1,0 +1,53 @@
+<div style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 900px; margin: 20px auto; padding: 40px; background-color: #ffffff; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); border: 1px solid #e0e0e0;">
+    <h1 style="color: #2c3e50; border-bottom: 2px solid #27ae60; padding-bottom: 10px; margin-top: 0;">CPU Scheduling Algorithms: The Orchestration of Time</h1>
+    
+    <h2 style="color: #2ecc71; margin-top: 30px;">1. Introduction</h2>
+    <p>At its core, a computer possesses painfully limited resources. Even the most powerful consumer CPU might only have 8 or 16 physical cores. Yet, when you press `Control-Alt-Delete` and open your Task Manager, you will see thousands of distinct Threads and hundreds of Processes running. How can 16 cores execute thousands of applications seemingly instantaneously?</p>
+    <p>This grand illusion is the masterpiece of the Operating System's <strong>CPU Scheduler</strong>. The CPU spends its entire existence rapidly switching its attention between programs (Context Switching), giving each process a tiny fraction of a millisecond. If the scheduling logic is intelligent, the entire desktop feels flawlessly responsive. If the logic fails, your mouse stutters, your games lag, and the entire operating system stalls.</p>
+
+    <h2 style="color: #2ecc71; margin-top: 30px;">2. Core Explanation</h2>
+    <p>CPU Scheduling answers one vital question: <em>Out of the 50 programs currently sitting in the Ready Queue waiting to execute, which one gets to use the mathematical core of the CPU strictly right now?</em></p>
+    <div style="background-color: #e8f8f5; padding: 15px; border-left: 4px solid #2ecc71; margin: 20px 0;">
+        <strong>The Dilemma of Scheduling Metrics:</strong><br>
+        There is no algorithm that is perfect for every scenario. OS Architects are constantly sacrificing one metric for another. They must balance:
+        <ul style="margin-top: 10px;">
+            <li><strong>Throughput:</strong> Maximizing the raw number of processes completed per hour.</li>
+            <li><strong>Turnaround Time:</strong> Minimizing the time between a process starting and completely finishing.</li>
+            <li><strong>Response Time:</strong> Minimizing the delay between a user clicking a button and the UI updating on the monitor.</li>
+        </ul>
+    </div>
+
+    <h2 style="color: #2ecc71; margin-top: 30px;">3. Working / Concept Breakdown: The Core Algorithms</h2>
+    <p>The academic theory behind CPU scheduling birthed a series of increasingly sophisticated algorithms. Understanding these algorithms reveals the architectural evolution of modern computers.</p>
+
+    <ol>
+        <li style="margin-bottom: 10px;"><strong>First Come, First Served (FCFS):</strong> The simplest approach. Processes are pushed into a FIFO queue. Whoever arrives first gets total control of the CPU until they finish. <br><em>Problem:</em> If a massive, 1-hour video render arrives before a 1-millisecond keyboard input, the user's keyboard will freeze for an hour (The Convoy Effect).</li>
+        
+        <li style="margin-bottom: 10px;"><strong>Shortest Job First (SJF):</strong> The CPU scans the queue and executes the process that requires the absolute minimum amount of CPU time to complete. Mathematically, SJF guarantees the lowest total average waiting time of any algorithm.<br><em>Problem:</em> It is physically impossible to implement on consumer PCs, because the Operating System cannot accurately predict the future behavior of unpredictable web browsers and word processors.</li>
+        
+        <li style="margin-bottom: 10px;"><strong>Round Robin (RR):</strong> This is the foundation of interactive desktop computing. The CPU treats the queue like a circle. It gives Process 1 a strict <strong>Time Quantum</strong> (e.g., 4 milliseconds). After 4ms, the OS mercilessly rips the CPU away through a hardware interrupt, shoves Process 1 to the back of the line, and gives Process 2 its 4 milliseconds. This iterates forever.</li>
+    </ol>
+
+    <h2 style="color: #2ecc71; margin-top: 30px;">4. Advanced Evolution: Multilevel Feedback Queue</h2>
+    <p>Modern operating systems like Windows and macOS do not use basic Round Robin. They use the pinnacle of scheduling theory: <strong>The Multilevel Feedback Queue (MLFQ)</strong>.</p>
+    <p>The MLFQ does not have one queue. It has multiple prioritized queues. Queue A (Priority Level 1) is for highly urgent, interactive tasks (mouse movements, audio playback). Queue D (Priority Level 4) is for background, purely mathematical tasks (cloud backups, rendering files).</p>
+    <p>When a process launches, it is injected into Queue A. However, if the process is greedy and completely consumes its round-robin Time Quantum without pausing for an I/O operation (like waiting for a hard drive), the Scheduler ruthlessly demotes that process down to Queue B, then Queue C, punishing heavy background tasks to preserve the blisteringly fast response time of interactive UI elements.</p>
+
+    <h2 style="color: #2ecc71; margin-top: 30px;">5. Advantages / Benefits</h2>
+    <ul>
+        <li><strong>Fairness vs Priority:</strong> By leveraging algorithms like Round Robin and MLFQ, a single Operating System can handle a mission-critical heart rate monitor while simultaneously rendering a YouTube video in the background without either crashing.</li>
+        <li><strong>Agile System Utilization:</strong> It maximizes actual CPU hardware usage to nearly 100%. While Process A waits for slow data to arrive from the Hard Drive (I/O block), the Scheduler instantaneously switches to Process B to crunch math, ensuring the silicon is never idle.</li>
+    </ul>
+
+    <h2 style="color: #2ecc71; margin-top: 30px;">6. Disadvantages / Limitations</h2>
+    <ul>
+        <li><strong>Context Switch Overhead:</strong> A context switch (ripping the CPU from Process A to give it to B) requires heavy computational overhead. The OS must save the current state of physical registers, program counters, and memory maps into RAM. If a Round Robin time quantum is set too low (e.g., 1 microsecond), the CPU will spend 90% of its lifespan switching processes rather than executing actual application code.</li>
+        <li><strong>Starvation:</strong> In strict priority-based scheduling, a low-priority background process might sleep forever ("Starve") if high-priority UI processes are constantly spawning.</li>
+    </ul>
+
+    <h2 style="color: #2ecc71; margin-top: 30px;">7. Priority Inversion (The Mars Pathfinder Disaster)</h2>
+    <p style="background-color: #fce4ec; border-left: 4px solid #e91e63; padding: 15px;">In 1997, the Mars Pathfinder lander began experiencing total system reboots while parked on the surface of Mars. The issue was traced to a scheduling bug called <strong>Priority Inversion</strong>. A low-priority temperature-gathering task grabbed an essential memory lock. An ultra-high priority Data Bus task needed that lock. However, a medium-priority communications task kept running indefinitely, starving the low-priority task, preventing it from ever releasing the lock. The highest-priority system task was stalled by a medium priority task! NASA engineers had to remotely upload an OS patch 100 million miles away to enable "Priority Inheritance" to solve the logic failure.</p>
+
+    <h2 style="color: #2ecc71; margin-top: 30px;">8. Conclusion</h2>
+    <p>CPU Scheduling algorithms act as the grand maestro of all computing hardware. By continually advancing scheduling heuristics from simple First-In-First-Out queues to the immensely complex Multi-level Feedback Queues of today, OS architects ensure the illusion of flawless, uninterrupted human-computer interaction, enabling the multitasking foundation that our modern digital economy relies upon entirely.</p>
+</div>
