@@ -37,3 +37,5 @@ Users access the site via ESP32 IP address
 🔹 Libraries (if used)
 WiFi.h
 WebServer.h
+
+(Will be updated)
