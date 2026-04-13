@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>EduSpark – Study Materials</title>
+    <title>Off-learn – Study Materials</title>
     <link rel="stylesheet" href="css/style.css" />
 </head>
 
@@ -15,7 +15,7 @@
         <header class="shared-navbar">
             <a class="shared-navbar__brand" href="dashboard.html">
                 <span class="shared-navbar__badge">ES</span>
-                <span>EduSpark</span>
+                <span>Off-learn</span>
             </a>
             <nav class="shared-navbar__links" aria-label="Main navigation">
                 <a class="shared-navbar__link" data-page="dashboard.html" href="dashboard.html">Dashboard</a>
@@ -179,7 +179,7 @@
                             <path d="M12 3L1 9l11 6 9-4.91V17h2V9L12 3zM5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82z" />
                         </svg>
                     </div>
-                    EduSpark
+                    Off-learn
                 </div>
                 <p>The ultimate platform for collaborative learning and resource management in modern education.</p>
             </div>
@@ -205,7 +205,7 @@
             </div>
         </div>
         <div class="footer-bottom">
-            &copy; 2024 EduSpark. All rights reserved. Designed for excellence in learning.
+            &copy; 2024 Off-learn. All rights reserved. Designed for excellence in learning.
         </div>
     </footer>
 
@@ -239,13 +239,13 @@
     function getLoggedInUser() {
       var storedUser = localStorage.getItem("loggedInUser") ||
         localStorage.getItem("currentUser") ||
-        localStorage.getItem("edusparkSession");
+        localStorage.getItem("off-learnSession");
       if (!storedUser) return null;
       try { return JSON.parse(storedUser); }
       catch (e) {
         localStorage.removeItem("loggedInUser");
         localStorage.removeItem("currentUser");
-        localStorage.removeItem("edusparkSession");
+        localStorage.removeItem("off-learnSession");
         return null;
       }
     }
@@ -259,7 +259,7 @@
     function logout() {
       localStorage.removeItem("loggedInUser");
       localStorage.removeItem("currentUser");
-      localStorage.removeItem("edusparkSession");
+      localStorage.removeItem("off-learnSession");
       window.location.href = "index.html";
     }
     window.getLoggedInUser = getLoggedInUser;

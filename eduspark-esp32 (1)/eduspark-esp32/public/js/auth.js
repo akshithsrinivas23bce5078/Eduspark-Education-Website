@@ -8,7 +8,7 @@ function getLoggedInUser() {
   const storedUser =
     localStorage.getItem("loggedInUser") ||
     localStorage.getItem("currentUser") ||
-    localStorage.getItem("edusparkSession");
+    localStorage.getItem("off-learnSession");
 
   if (!storedUser) {
     return null;
@@ -20,7 +20,7 @@ function getLoggedInUser() {
     console.error("Failed to parse stored session:", error);
     localStorage.removeItem("loggedInUser");
     localStorage.removeItem("currentUser");
-    localStorage.removeItem("edusparkSession");
+    localStorage.removeItem("off-learnSession");
     return null;
   }
 }
@@ -103,7 +103,7 @@ document.addEventListener("DOMContentLoaded", function () {
 function logout() {
   localStorage.removeItem("loggedInUser");
   localStorage.removeItem("currentUser");
-  localStorage.removeItem("edusparkSession");
+  localStorage.removeItem("off-learnSession");
   window.location.href = "index.html";
 }
 
