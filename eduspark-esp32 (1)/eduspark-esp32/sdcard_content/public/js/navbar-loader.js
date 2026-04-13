@@ -11,7 +11,7 @@
   function logout() {
     localStorage.removeItem("loggedInUser");
     localStorage.removeItem("currentUser");
-    localStorage.removeItem("edusparkSession");
+    localStorage.removeItem("off-learnSession");
     window.location.href = "index.html";
   }
 

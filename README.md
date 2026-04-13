@@ -1,6 +1,6 @@
-📚 EduSpark – Smart Education Website (Arduino Powered)
+📚 Off-learn – Smart Education Website (Arduino Powered)
 
-EduSpark is a web-based educational platform powered by Arduino (ESP32) that hosts a dynamic website directly from a microcontroller. It combines embedded systems with web technologies to deliver an interactive learning interface.
+Off-learn is a web-based educational platform powered by Arduino (ESP32) that hosts a dynamic website directly from a microcontroller. It combines embedded systems with web technologies to deliver an interactive learning interface.
 
 🚀 Overview
 

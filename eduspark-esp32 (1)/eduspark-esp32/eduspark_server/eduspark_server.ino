@@ -6,7 +6,7 @@
 #include <DNSServer.h>
 #include <driver/gpio.h>
 
-const char *ssid = "Eduspark_AP";
+const char *ssid = "Off-learn_AP";
 const char *password = "12345678";
 
 WebServer server(80);

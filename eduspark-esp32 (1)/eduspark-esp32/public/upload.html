@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>EduSpark – Upload Content</title>
+    <title>Off-learn – Upload Content</title>
     <link rel="stylesheet" href="css/style.css" />
 </head>
 
@@ -15,7 +15,7 @@
         <header class="shared-navbar">
             <a class="shared-navbar__brand" href="dashboard.html">
                 <span class="shared-navbar__badge">ES</span>
-                <span>EduSpark</span>
+                <span>Off-learn</span>
             </a>
             <nav class="shared-navbar__links" aria-label="Main navigation">
                 <a class="shared-navbar__link" data-page="dashboard.html" href="dashboard.html">Dashboard</a>
@@ -159,7 +159,7 @@
 
     <!-- ═══════ FOOTER ═══════ -->
     <footer>
-        © 2024 EduSpark Academic Management System
+        © 2024 Off-learn Academic Management System
     </footer>
 
     <!-- ══════════════════════════════════════════════════════════════════
@@ -168,7 +168,7 @@
     <script>
     // ===== auth =====
     function getLoggedInUser() {
-      var s = localStorage.getItem("loggedInUser") || localStorage.getItem("currentUser") || localStorage.getItem("edusparkSession");
+      var s = localStorage.getItem("loggedInUser") || localStorage.getItem("currentUser") || localStorage.getItem("off-learnSession");
       if (!s) return null;
       try { return JSON.parse(s); } catch(e) { return null; }
     }
@@ -179,7 +179,7 @@
     function logout() {
       localStorage.removeItem("loggedInUser");
       localStorage.removeItem("currentUser");
-      localStorage.removeItem("edusparkSession");
+      localStorage.removeItem("off-learnSession");
       window.location.href = "index.html";
     }
     window.getLoggedInUser = getLoggedInUser;
